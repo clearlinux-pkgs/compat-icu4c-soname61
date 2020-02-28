@@ -6,16 +6,16 @@
 #
 Name     : compat-icu4c-soname61
 Version  : 61.1
-Release  : 23
+Release  : 24
 URL      : http://download.icu-project.org/files/icu4c/61.1/icu4c-61_1-src.tgz
 Source0  : http://download.icu-project.org/files/icu4c/61.1/icu4c-61_1-src.tgz
-Source1 : http://download.icu-project.org/files/icu4c/61.1/icu4c-61_1-src.tgz.asc
+Source1  : http://download.icu-project.org/files/icu4c/61.1/icu4c-61_1-src.tgz.asc
 Summary  : International Components for Unicode
 Group    : Development/Tools
 License  : NCSA
 Requires: compat-icu4c-soname61-lib = %{version}-%{release}
+Requires: compat-icu4c-soname61-license = %{version}-%{release}
 BuildRequires : apache-ant
-BuildRequires : buildreq-mvn
 BuildRequires : doxygen
 BuildRequires : gcc-dev32
 BuildRequires : gcc-libgcc32
@@ -46,6 +46,7 @@ not contain any of the data files needed at runtime and present in the
 %package lib
 Summary: lib components for the compat-icu4c-soname61 package.
 Group: Libraries
+Requires: compat-icu4c-soname61-license = %{version}-%{release}
 
 %description lib
 lib components for the compat-icu4c-soname61 package.
@@ -54,13 +55,23 @@ lib components for the compat-icu4c-soname61 package.
 %package lib32
 Summary: lib32 components for the compat-icu4c-soname61 package.
 Group: Default
+Requires: compat-icu4c-soname61-license = %{version}-%{release}
 
 %description lib32
 lib32 components for the compat-icu4c-soname61 package.
 
 
+%package license
+Summary: license components for the compat-icu4c-soname61 package.
+Group: Default
+
+%description license
+license components for the compat-icu4c-soname61 package.
+
+
 %prep
 %setup -q -n icu
+cd %{_builddir}/icu
 pushd ..
 cp -a icu build32
 popd
@@ -70,7 +81,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1567811367
+export SOURCE_DATE_EPOCH=1582919279
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
@@ -101,10 +112,10 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 pushd source ; make check; popd
 
 %install
-export SOURCE_DATE_EPOCH=1567811367
+export SOURCE_DATE_EPOCH=1582919279
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/compat-icu4c-soname61
-cp license.html %{buildroot}/usr/share/package-licenses/compat-icu4c-soname61/license.html
+cp %{_builddir}/icu/license.html %{buildroot}/usr/share/package-licenses/compat-icu4c-soname61/06e7821c4127e21850f5c981698443b6f31e0ef1
 pushd ../build32/source
 %make_install32
 if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
@@ -396,3 +407,7 @@ rm -f %{buildroot}/usr/share/man/man8/icupkg.8
 /usr/lib32/libicutu.so.61.1
 /usr/lib32/libicuuc.so.61
 /usr/lib32/libicuuc.so.61.1
+
+%files license
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/compat-icu4c-soname61/06e7821c4127e21850f5c981698443b6f31e0ef1
